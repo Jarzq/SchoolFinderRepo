@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SchoolFinder.Models;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
 
 namespace SchoolFinder.models
 {
-    public class JednostkaSzkolna
+    public class SchoolEntity
     {
         [Key]
         public int Id { get; set; }
@@ -13,5 +14,7 @@ namespace SchoolFinder.models
         public string NazwaOddzialu { get; set; }
         public double MinimalnePunkty { get; set; }
         public double MaksymalnePunkty { get; set; }
+        public int SchoolType { get; set; }
+        public List<SchoolEntitySubject> SchoolEntitySubjects { get; set; }
     }
 }

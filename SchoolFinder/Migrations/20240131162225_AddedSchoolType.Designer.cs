@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolFinder.Data;
 
@@ -10,9 +11,10 @@ using SchoolFinder.Data;
 namespace SchoolFinder.Migrations
 {
     [DbContext(typeof(SchoolfinderContext))]
-    partial class SchoolfinderContextModelSnapshot : ModelSnapshot
+    [Migration("20240131162225_AddedSchoolType")]
+    partial class AddedSchoolType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

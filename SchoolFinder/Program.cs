@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<ISchoolEntityService, SchoolEntityService>();
+builder.Services.AddScoped<IExcelService, ExcelService>();
 
 builder.Services.AddDbContext<SchoolfinderContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolFinder.Data;
 
@@ -10,9 +11,10 @@ using SchoolFinder.Data;
 namespace SchoolFinder.Migrations
 {
     [DbContext(typeof(SchoolfinderContext))]
-    partial class SchoolfinderContextModelSnapshot : ModelSnapshot
+    [Migration("20240124172318_AddSubject")]
+    partial class AddSubject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,16 +49,13 @@ namespace SchoolFinder.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SchoolType")
-                        .HasColumnType("int");
-
                     b.Property<string>("SymbolOddzialu")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("SchoolEntities");
+                    b.ToTable("JednostkiSzkolne");
                 });
 
             modelBuilder.Entity("SchoolFinder.Models.SchoolEntitySubject", b =>
@@ -79,7 +78,7 @@ namespace SchoolFinder.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("SchoolEntitySubjects");
+                    b.ToTable("SchoolEntitySubject");
                 });
 
             modelBuilder.Entity("SchoolFinder.Models.Subject", b =>
@@ -95,7 +94,7 @@ namespace SchoolFinder.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subjects");
+                    b.ToTable("Subject");
                 });
 
             modelBuilder.Entity("SchoolFinder.Models.SchoolEntitySubject", b =>

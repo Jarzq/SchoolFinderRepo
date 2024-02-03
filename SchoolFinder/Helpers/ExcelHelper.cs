@@ -5,9 +5,9 @@ namespace SchoolFinder.Helpers
 {
     public static class ExcelHelper
     {
-        public static List<JednostkaSzkolna> ReadExcelFile(string filePath)
+        public static List<SchoolEntity> ReadExcelFile(string filePath)
         {
-            var jednostkiSzkolne = new List<JednostkaSzkolna>();
+            var jednostkiSzkolne = new List<SchoolEntity>();
 
             using (var package = new ExcelPackage(new FileInfo(filePath)))
             {
@@ -16,7 +16,7 @@ namespace SchoolFinder.Helpers
 
                 for (int row = 4; row <= worksheet.Dimension.End.Row; row++)
                 {
-                    var jednostkaSzkolna = new JednostkaSzkolna
+                    var jednostkaSzkolna = new SchoolEntity
                     {
                         Dzielnica = worksheet.Cells[row, 1].Value.ToString(),
                         NazwaSzkoly = worksheet.Cells[row, 2].Value.ToString(),
