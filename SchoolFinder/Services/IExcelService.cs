@@ -8,5 +8,6 @@ namespace SchoolFinder.Services
         Task AddSchoolTypes(List<SchoolEntity> jednostkaSzkolnaList);
         Task AddSubjects();
         Task AssignSubjects();
+        Task EnsuretablesEmpty();
     }
 }

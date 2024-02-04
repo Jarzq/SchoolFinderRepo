@@ -6,7 +6,7 @@ using System.Net;
 namespace SchoolFinder.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("/ImportExcelData")]
     public class ExcelDataController : ControllerBase
     {
         private readonly IExcelService _service;
@@ -20,19 +20,27 @@ namespace SchoolFinder.Controllers
         }
 
         [HttpPost(Name = "AddDataFromExcel")]
-        public async Task AddDataFromExcelWorksheet()
+        public async Task<IActionResult> AddDataFromExcelWorksheet()
         {
-            string fileName = _configuration["FileNames:SchoolsDataFilename"];
-            string excelDatafilePath = Path.Combine(Directory.GetCurrentDirectory(), "Sources", fileName);
+            try
+            {
+                string fileName = _configuration["FileNames:SchoolsDataFilename"];
+                string excelDatafilePath = Path.Combine(Directory.GetCurrentDirectory(), "Sources", fileName);
 
-            var schoolEntities = ExcelHelper.ReadExcelFile(excelDatafilePath);
+                var schoolEntities = ExcelHelper.ReadExcelFile(excelDatafilePath);
 
-            //await _service.AddSchoolEntityList(schoolEntities);
-             await _service.AddSchoolTypes(schoolEntities);
-             await _service.AddSubjects();
-             await _service.AssignSubjects();
+                await _service.EnsuretablesEmpty();
 
-            Response.StatusCode = (int)HttpStatusCode.Created;
+                await _service.AddSchoolTypes(schoolEntities);
+                await _service.AddSubjects();
+                await _service.AssignSubjects();
+
+                return StatusCode((int)HttpStatusCode.Created);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
     }
 }

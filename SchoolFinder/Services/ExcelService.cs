@@ -1,4 +1,5 @@
-﻿using SchoolFinder.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SchoolFinder.Data;
 using SchoolFinder.Enums;
 using SchoolFinder.models;
 using SchoolFinder.Models;
@@ -28,6 +29,7 @@ namespace SchoolFinder.Services
         public async Task AddSchoolTypes(List<SchoolEntity> schoolEntities)
         {
             var schoolsWithTypes = ExtractTypes(schoolEntities);
+
             _dbContext.UpdateRange(schoolsWithTypes);
             await _dbContext.SaveChangesAsync();
         }
@@ -124,6 +126,36 @@ namespace SchoolFinder.Services
             }
 
             return subjectNames;
+        }
+
+        public async Task EnsuretablesEmpty()
+        {
+            bool isSchoolEntitiesEmpty = !await _dbContext.SchoolEntities.AnyAsync();
+            bool isSchoolEntityLanguageSubjectsEmpty = !await _dbContext.SchoolEntityLanguageSubjects.AnyAsync();
+            bool isSchoolEntitySubjectsEmpty = !await _dbContext.SchoolEntitySubjects.AnyAsync();
+            bool isSubjectsEmpty = !await _dbContext.Subjects.AnyAsync();
+
+            if (!isSchoolEntitiesEmpty)
+            {
+                _dbContext.SchoolEntities.RemoveRange(await _dbContext.SchoolEntities.ToListAsync());
+            }
+
+            if (!isSchoolEntityLanguageSubjectsEmpty)
+            {
+                _dbContext.Subjects.RemoveRange(await _dbContext.Subjects.ToListAsync());
+            }
+
+            if (!isSchoolEntitySubjectsEmpty)
+            {
+                _dbContext.SchoolEntitySubjects.RemoveRange(await _dbContext.SchoolEntitySubjects.ToListAsync());
+            }
+
+            if (!isSubjectsEmpty)
+            {
+                _dbContext.Subjects.RemoveRange(await _dbContext.Subjects.ToListAsync());
+            }
+
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

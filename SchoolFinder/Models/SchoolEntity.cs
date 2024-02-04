@@ -1,6 +1,5 @@
 ﻿using SchoolFinder.Models;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.InteropServices;
 
 namespace SchoolFinder.models
 {
