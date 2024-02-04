@@ -6,6 +6,7 @@ namespace SchoolFinder.Services
     {
         Task AddSchoolEntityList(List<SchoolEntity> jednostkaSzkolnaList);
         Task AddSchoolTypes(List<SchoolEntity> jednostkaSzkolnaList);
-        List<string> AddSubjects(List<SchoolEntity> schoolEntities);
+        Task AddSubjects();
+        Task AssignSubjects();
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolFinder.Data;
 
@@ -10,9 +11,10 @@ using SchoolFinder.Data;
 namespace SchoolFinder.Migrations
 {
     [DbContext(typeof(SchoolfinderContext))]
-    partial class SchoolfinderContextModelSnapshot : ModelSnapshot
+    [Migration("20240203205706_addedLanguageSubjectEntity")]
+    partial class addedLanguageSubjectEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,32 +61,6 @@ namespace SchoolFinder.Migrations
                     b.ToTable("SchoolEntities");
                 });
 
-            modelBuilder.Entity("SchoolFinder.Models.SchoolEntityLanguageSubject", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LanguageSubjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SchoolEntityId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageSubjectId");
-
-                    b.HasIndex("SchoolEntityId");
-
-                    b.ToTable("SchoolEntityLanguageSubjects");
-                });
-
             modelBuilder.Entity("SchoolFinder.Models.SchoolEntitySubject", b =>
                 {
                     b.Property<int>("Id")
@@ -122,25 +98,6 @@ namespace SchoolFinder.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Subjects");
-                });
-
-            modelBuilder.Entity("SchoolFinder.Models.SchoolEntityLanguageSubject", b =>
-                {
-                    b.HasOne("SchoolFinder.Models.Subject", "LanguageSubject")
-                        .WithMany()
-                        .HasForeignKey("LanguageSubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SchoolFinder.models.SchoolEntity", "SchoolEntity")
-                        .WithMany()
-                        .HasForeignKey("SchoolEntityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("LanguageSubject");
-
-                    b.Navigation("SchoolEntity");
                 });
 
             modelBuilder.Entity("SchoolFinder.Models.SchoolEntitySubject", b =>

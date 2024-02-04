@@ -9,6 +9,7 @@ namespace SchoolFinder.Data
         public DbSet<SchoolEntity> SchoolEntities { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<SchoolEntitySubject> SchoolEntitySubjects { get; set; }
+        public DbSet<SchoolEntityLanguageSubject> SchoolEntityLanguageSubjects { get; set; }
         public SchoolfinderContext(DbContextOptions<SchoolfinderContext> options) : base(options)
         {
         }

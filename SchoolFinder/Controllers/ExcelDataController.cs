@@ -28,8 +28,9 @@ namespace SchoolFinder.Controllers
             var schoolEntities = ExcelHelper.ReadExcelFile(excelDatafilePath);
 
             //await _service.AddSchoolEntityList(schoolEntities);
-             //_service.AddSubjects(schoolEntities);
              await _service.AddSchoolTypes(schoolEntities);
+             await _service.AddSubjects();
+             await _service.AssignSubjects();
 
             Response.StatusCode = (int)HttpStatusCode.Created;
         }

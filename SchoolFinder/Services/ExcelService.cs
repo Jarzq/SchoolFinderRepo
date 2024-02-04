@@ -1,5 +1,4 @@
-﻿using Microsoft.OpenApi.Extensions;
-using SchoolFinder.Data;
+﻿using SchoolFinder.Data;
 using SchoolFinder.Enums;
 using SchoolFinder.models;
 using SchoolFinder.Models;
@@ -35,7 +34,7 @@ namespace SchoolFinder.Services
 
         private List<SchoolEntity> ExtractTypes(List<SchoolEntity> schoolEntities)
         {
-            foreach(SchoolEntity school in schoolEntities)
+            foreach (SchoolEntity school in schoolEntities)
             {
                 if (school.NazwaSzkoly.Contains(SchoolType.Liceum.ToString()))
                 {
@@ -53,15 +52,56 @@ namespace SchoolFinder.Services
             return schoolEntities;
         }
 
-        public List<string> AddSubjects(List<SchoolEntity> schoolEntities)
+        public async Task AssignSubjects()
         {
-            List<string> subjectNames = new List<string>();
-            foreach (var schoolEntity in schoolEntities)
+            var allSubjects = _dbContext.Subjects.ToList();
+            var allEntities = _dbContext.SchoolEntities.ToList();
+            List<SchoolEntitySubject> schoolEntitySubjects = new List<SchoolEntitySubject>();
+            List<SchoolEntityLanguageSubject> schoolEntityLanguageSubjects = new List<SchoolEntityLanguageSubject>();
+
+            foreach (var subject in allSubjects)
             {
-                subjectNames.AddRange(ExtractSubjectNames(schoolEntity.NazwaOddzialu));
+                foreach (var entity in allEntities)
+                {
+                    var chunks = entity.NazwaOddzialu.Split(" ");
+                    if (chunks[1].Contains(subject.Name))
+                    {
+                        var entitySubject = new SchoolEntitySubject() { SchoolEntity = entity, Subject = subject };
+                        schoolEntitySubjects.Add(entitySubject);
+                    }
+                    for (int i = 0; i < chunks.Length; i++)
+                    {
+                        if (chunks[i].Contains("(") && chunks[i].Contains(subject.Name))
+                        {
+                            var entityLanguageSubject = new SchoolEntityLanguageSubject() { SchoolEntity = entity, LanguageSubject = subject };
+                            schoolEntityLanguageSubjects.Add(entityLanguageSubject);
+                        }
+                    }
+                }
             }
-            subjectNames = subjectNames.Distinct().ToList();
-            return subjectNames;
+
+
+            _dbContext.AddRange(schoolEntitySubjects);
+            _dbContext.AddRange(schoolEntityLanguageSubjects);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task AddSubjects()
+        {
+            var allLiceum = _dbContext.SchoolEntities.Where(e => e.SchoolType == 1).ToList();
+            var subjectNames = new HashSet<string>();
+            var subjectList = new List<Subject>();
+
+            foreach (var schoolEntity in allLiceum)
+                subjectNames.UnionWith(ExtractSubjectNames(schoolEntity.NazwaOddzialu));
+
+            foreach (var subjectName in subjectNames)
+            {
+                var subject = new Subject() { Name = subjectName };
+                subjectList.Add(subject);
+            }
+            _dbContext.AddRange(subjectList);
+            await _dbContext.SaveChangesAsync();
         }
 
         private List<string> ExtractSubjectNames(string inputString)
@@ -70,13 +110,16 @@ namespace SchoolFinder.Services
             string[] singleNames = new string[0];
             List<string> subjectNames = new List<string>();
 
-            for (int i = 0; i < parts.Length; i++)
+            for (int i = 1; i < parts.Length; i++)
             {
                 if (parts[i].Contains('-'))
                 {
-                    singleNames = parts[i].Split('-');
-                    subjectNames = new List<string>(singleNames);
-                    break;
+                    singleNames = parts[i].Split(new char[] { '-', ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var name in singleNames)
+                    {
+                        string cleanedName = name.Replace("*", "").Replace("(", "").Replace(")", "");
+                        subjectNames.Add(cleanedName);
+                    }
                 }
             }
 

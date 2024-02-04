@@ -1,0 +1,31 @@
+# Ignore folders generated during build
+/bin/
+/obj/
+
+# Ignore user-specific files
+*.user
+
+# Ignore built artifacts
+*.dll
+*.exe
+*.pdb
+*.log
+*.zip
+*.swp
+
+# Ignore Visual Studio files
+.vs/
+*.suo
+*.cache
+*.csproj.user
+*.ide
+*.sln.docstates
+
+# Ignore packages folder and files
+/packages/
+
+# Ignore local configuration files
+appsettings.Development.json
+
+# Ignore any sensitive or environment-specific configurations that differ per developer or environment
+secrets.json
