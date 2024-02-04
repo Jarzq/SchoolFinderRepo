@@ -31,9 +31,11 @@ namespace SchoolFinder.Controllers
 
                 await _service.EnsuretablesEmpty();
 
-                await _service.AddSchoolTypes(schoolEntities);
+                await _service.AddSchoolEntities(schoolEntities);
                 await _service.AddSubjects();
                 await _service.AssignSubjects();
+                await _service.AddSpecializations();
+                await _service.AssignSpecializations();
 
                 return StatusCode((int)HttpStatusCode.Created);
             }

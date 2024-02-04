@@ -14,7 +14,9 @@ namespace SchoolFinder.models
         public double MinimalnePunkty { get; set; }
         public double MaksymalnePunkty { get; set; }
         public int SchoolType { get; set; }
-        public List<SchoolEntitySubject> SchoolEntitySubjects { get; set; }
-        public List<SchoolEntityLanguageSubject> SchoolEntityLanguageSubjects { get; set; }
+        public int? SpecializationId { get; set; }
+        public Specialization? Specialization { get; set; }
+        public List<SchoolEntitySubject>? SchoolEntitySubjects { get; set; }
+        public List<SchoolEntityLanguageSubject>? SchoolEntityLanguageSubjects { get; set; }
     }
 }

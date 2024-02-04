@@ -4,10 +4,11 @@ namespace SchoolFinder.Services
 {
     public interface IExcelService
     {
-        Task AddSchoolEntityList(List<SchoolEntity> jednostkaSzkolnaList);
-        Task AddSchoolTypes(List<SchoolEntity> jednostkaSzkolnaList);
+        Task AddSchoolEntities(List<SchoolEntity> jednostkaSzkolnaList);
         Task AddSubjects();
         Task AssignSubjects();
         Task EnsuretablesEmpty();
+        Task AddSpecializations();
+        Task AssignSpecializations();
     }
 }

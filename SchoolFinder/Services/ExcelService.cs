@@ -3,6 +3,7 @@ using SchoolFinder.Data;
 using SchoolFinder.Enums;
 using SchoolFinder.models;
 using SchoolFinder.Models;
+using System.Linq;
 
 namespace SchoolFinder.Services
 {
@@ -13,28 +14,24 @@ namespace SchoolFinder.Services
         {
             _dbContext = dbContext;
         }
-        public async Task AddSchoolEntityList(List<SchoolEntity> jednostkaSzkolnaList)
+
+        public async Task AddSchoolEntities(List<SchoolEntity> schoolEntities)
         {
             try
             {
-                _dbContext.AddRange(jednostkaSzkolnaList);
+                var schoolsWithTypes = AssignTypes(schoolEntities);
+
+                _dbContext.UpdateRange(schoolsWithTypes);
                 await _dbContext.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                throw new Exception("failed adding data to database", ex);
+                throw new Exception(ex.Message, ex);
             }
+
         }
 
-        public async Task AddSchoolTypes(List<SchoolEntity> schoolEntities)
-        {
-            var schoolsWithTypes = ExtractTypes(schoolEntities);
-
-            _dbContext.UpdateRange(schoolsWithTypes);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        private List<SchoolEntity> ExtractTypes(List<SchoolEntity> schoolEntities)
+        private List<SchoolEntity> AssignTypes(List<SchoolEntity> schoolEntities)
         {
             foreach (SchoolEntity school in schoolEntities)
             {
@@ -52,6 +49,24 @@ namespace SchoolFinder.Services
                 }
             }
             return schoolEntities;
+        }
+
+        public async Task AssignSpecializations()
+        {
+            var allspecializations = _dbContext.Specializations.ToList();
+            var schoolEntities = _dbContext.SchoolEntities.ToList();
+            foreach (SchoolEntity school in schoolEntities)
+            {
+                foreach(var specialization in allspecializations)
+                {
+                    if (school.NazwaOddzialu.Contains(specialization.Name))
+                    {
+                        school.Specialization = specialization;
+                    }
+                }
+            }
+            _dbContext.UpdateRange(schoolEntities);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task AssignSubjects()
@@ -106,6 +121,31 @@ namespace SchoolFinder.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task AddSpecializations()
+        {
+            var allEntities = _dbContext.SchoolEntities.Where(e => e.SchoolType != 1).ToList();
+            var specializationNames = new HashSet<string>();
+            var specializationList = new List<Specialization>();
+
+            foreach (var schoolEntity in allEntities)
+                specializationNames.Add(ExtractSpecializationNames(schoolEntity.NazwaOddzialu));
+
+            foreach (var specializationName in specializationNames)
+            {
+                var specialization = new Specialization() { Name = specializationName };
+                specializationList.Add(specialization);
+            }
+            _dbContext.AddRange(specializationList);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        private string ExtractSpecializationNames(string nazwaOddzialu)
+        {
+            string[] chunks = nazwaOddzialu.Split(']');
+            var correctChunk = chunks[1].Split("(");
+            return correctChunk[0];
+        }
+
         private List<string> ExtractSubjectNames(string inputString)
         {
             string[] parts = inputString.Split(' ');
@@ -134,6 +174,7 @@ namespace SchoolFinder.Services
             bool isSchoolEntityLanguageSubjectsEmpty = !await _dbContext.SchoolEntityLanguageSubjects.AnyAsync();
             bool isSchoolEntitySubjectsEmpty = !await _dbContext.SchoolEntitySubjects.AnyAsync();
             bool isSubjectsEmpty = !await _dbContext.Subjects.AnyAsync();
+            bool isSpecializationsEmpty = !await _dbContext.Specializations.AnyAsync();
 
             if (!isSchoolEntitiesEmpty)
             {
@@ -153,6 +194,11 @@ namespace SchoolFinder.Services
             if (!isSubjectsEmpty)
             {
                 _dbContext.Subjects.RemoveRange(await _dbContext.Subjects.ToListAsync());
+            }
+
+            if (!isSpecializationsEmpty)
+            {
+                _dbContext.Specializations.RemoveRange(await _dbContext.Specializations.ToListAsync());
             }
 
             await _dbContext.SaveChangesAsync();
