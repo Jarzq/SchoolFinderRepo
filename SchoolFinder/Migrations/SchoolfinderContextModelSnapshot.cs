@@ -56,7 +56,7 @@ namespace SchoolFinder.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SchoolEntities");
+                    b.ToTable("SchoolEntities", (string)null);
                 });
 
             modelBuilder.Entity("SchoolFinder.Models.SchoolEntityLanguageSubject", b =>
@@ -82,7 +82,7 @@ namespace SchoolFinder.Migrations
 
                     b.HasIndex("SchoolEntityId");
 
-                    b.ToTable("SchoolEntityLanguageSubjects");
+                    b.ToTable("SchoolEntityLanguageSubjects", (string)null);
                 });
 
             modelBuilder.Entity("SchoolFinder.Models.SchoolEntitySubject", b =>
@@ -105,7 +105,7 @@ namespace SchoolFinder.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("SchoolEntitySubjects");
+                    b.ToTable("SchoolEntitySubjects", (string)null);
                 });
 
             modelBuilder.Entity("SchoolFinder.Models.Subject", b =>
@@ -121,7 +121,7 @@ namespace SchoolFinder.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subjects");
+                    b.ToTable("Subjects", (string)null);
                 });
 
             modelBuilder.Entity("SchoolFinder.Models.SchoolEntityLanguageSubject", b =>

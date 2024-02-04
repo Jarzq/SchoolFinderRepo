@@ -16,5 +16,6 @@ namespace SchoolFinder.models
         public double MaksymalnePunkty { get; set; }
         public int SchoolType { get; set; }
         public List<SchoolEntitySubject> SchoolEntitySubjects { get; set; }
+        public List<SchoolEntityLanguageSubject> SchoolEntityLanguageSubjects { get; set; }
     }
 }
