@@ -11,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IExcelService, ExcelService>();
+builder.Services.AddScoped<ISchoolEntitiesService, SchoolEntitiesService>();
 
 builder.Services.AddDbContext<SchoolfinderContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 

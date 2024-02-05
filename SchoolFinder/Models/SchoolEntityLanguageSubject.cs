@@ -8,9 +8,9 @@ namespace SchoolFinder.Models
         [Key]
         public int Id { get; set; }
         public int SchoolEntityId { get; set; }
-        public SchoolEntity SchoolEntity { get; set; }
+        public SchoolEntity? SchoolEntity { get; set; }
 
-        public int LanguageId { get; set; }
-        public Subject LanguageSubject { get; set; }
+        public int? LanguageSubjectId { get; set; }
+        public Subject? LanguageSubject { get; set; }
     }
 }
