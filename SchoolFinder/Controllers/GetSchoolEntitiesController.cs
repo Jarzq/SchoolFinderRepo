@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SchoolFinder.Helpers;
+using SchoolFinder.DTOs;
 using SchoolFinder.Services;
-using System.Net;
 
 namespace SchoolFinder.Controllers
 {
@@ -20,11 +19,11 @@ namespace SchoolFinder.Controllers
         }
 
         [HttpGet(Name = "GetSchoolEntities")]
-        public async Task<List<GetSchoolEntitiesControllerResponse>> GetSchoolEntities()
+        public async Task<List<SchoolEntitiesDTO>> GetSchoolEntities()
         {
-           var schoolEntities = _service.GetAllSchoolEntities().ToList();
+            var schoolEntities = _service.GetAllSchoolEntities().ToList();
 
-           var mappedSchoolEntites = _service.MapSchoolEntities(schoolEntities).ToList();
+            var mappedSchoolEntites = _service.MapSchoolEntities(schoolEntities).ToList();
 
             return mappedSchoolEntites;
         }

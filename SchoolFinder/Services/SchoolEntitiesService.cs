@@ -1,8 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolFinder.Controllers;
 using SchoolFinder.Data;
+using SchoolFinder.DTOs;
 using SchoolFinder.Enums;
 using SchoolFinder.models;
+using SchoolFinder.Models;
+using System.Linq;
 
 namespace SchoolFinder.Services
 {
@@ -18,17 +21,21 @@ namespace SchoolFinder.Services
         {
             return _dbContext.SchoolEntities.Include(schoolEntity => schoolEntity.Specialization)
                 .Include(s => s.SchoolEntitySubjects)
-                .Include(s => s.SchoolEntityLanguageSubjects);
+                    .ThenInclude(s => s.Subject)
+                .Include(s => s.SchoolEntityLanguageSubjects)
+                    .ThenInclude(s => s.LanguageSubject);
+
+
         }
 
-        public IEnumerable<GetSchoolEntitiesControllerResponse> MapSchoolEntities(List<SchoolEntity> schoolEntities)
+        public IEnumerable<SchoolEntitiesDTO> MapSchoolEntities(List<SchoolEntity> schoolEntities)
         {
             var subjects = _dbContext.Subjects.ToList();
-            var mappedSchoolEntityList = new List<GetSchoolEntitiesControllerResponse>();
+            var mappedSchoolEntityList = new List<SchoolEntitiesDTO>();
 
             foreach (var schoolEntity in schoolEntities)
             {
-                var mappedSchoolEntity = new GetSchoolEntitiesControllerResponse()
+                var mappedSchoolEntity = new SchoolEntitiesDTO()
                 {
                     Id = schoolEntity.Id,
                     Dzielnica = schoolEntity.Dzielnica,
@@ -51,6 +58,88 @@ namespace SchoolFinder.Services
                 mappedSchoolEntityList.Add(mappedSchoolEntity);
             }
             return mappedSchoolEntityList;
+        }
+
+        public IEnumerable<SchoolEntitiesDTO> GetExactPreferredSchoolEntities(GetPrefferedSchoolEntitiesControllerRequest request)
+        {
+            var allSchoolEntities = GetAllSchoolEntities();
+            List<SchoolEntity> preferredEntities = new List<SchoolEntity>();
+
+            foreach (var entity in allSchoolEntities)
+            {
+                var schoolTypeEnumValue = (SchoolType)entity.SchoolType;
+
+                var isDzielnicaOk = CheckDzielnica(request.PrefferedDzielnica, entity.Dzielnica);
+                var isSpecializacionNameOk = schoolTypeEnumValue == SchoolType.Liceum || CheckSpecializationName(request.PrefferedSpecialization, entity.Specialization?.Name);
+                var isSchoolTypeOk = CheckSchoolType(request.PrefferedSchoolType, entity.SchoolType);
+                var isPointsOk = CheckPoints(request.AcheivedPunkty, request.rangeDecrease, request.RangeIncrease, entity.MinimalnePunkty);
+                var isSubjectListOk = schoolTypeEnumValue != SchoolType.Liceum || CheckSubjects(request.NumberMatchingSubjects, request.PrefferedExtendedSubjects, entity.SchoolEntitySubjects);
+                var isLanguageListOk = CheckLanguages(request.NumberMatchingLanguages, request.PrefferedLanguages, entity.SchoolEntityLanguageSubjects);
+
+                if (isDzielnicaOk && isSpecializacionNameOk && isSchoolTypeOk && isPointsOk && isSubjectListOk && isLanguageListOk)
+                {
+                    preferredEntities.Add(entity);
+                }
+             }
+            
+            return MapSchoolEntities(preferredEntities);
+        }
+
+        private bool CheckDzielnica(string? prefferedDzielnica, string entityDzielnica)
+        {
+            if (prefferedDzielnica == entityDzielnica || prefferedDzielnica == null)
+                return true;
+            return false;
+        }
+        private bool CheckSpecializationName(string? prefferedSpecialization, string entitySpecialization)
+        {
+            if (prefferedSpecialization == entitySpecialization || prefferedSpecialization == null)
+                return true;
+            return false;
+        }
+        private bool CheckSchoolType(string prefferedSchoolType, int entitySchoolType)
+        {
+            
+            if (prefferedSchoolType == Enum.GetName(typeof(SchoolType), entitySchoolType))
+                return true;
+            return false;
+        }
+        private bool CheckPoints(double? acheivedPunkty, double? rangeDecrease, double? rangeIncrease, double minimalnePunkty)
+        {
+            if((minimalnePunkty - acheivedPunkty <= rangeDecrease) && (acheivedPunkty - minimalnePunkty <= rangeIncrease))
+                return true;
+            return false;
+        }
+        private bool CheckLanguages(int numberMatchingLanguages, List<string>? prefferedLanguages, List<SchoolEntityLanguageSubject>? schoolEntityLanguageSubjects)
+        {
+            int counter = 0;
+            foreach (SchoolEntityLanguageSubject schoolEntityLanguageSubject in schoolEntityLanguageSubjects)
+            {
+                if (prefferedLanguages == null)
+                    return true;
+                if (prefferedLanguages.Contains(schoolEntityLanguageSubject.LanguageSubject.Name)){
+                    counter++;
+                }
+                if (counter >= numberMatchingLanguages)
+                    return true;
+            }
+            return false;
+        }
+
+        private bool CheckSubjects(int numberMatchingSubjects, List<string>? prefferedExtendedSubjects, List<SchoolEntitySubject>? schoolEntitySubjects)
+        {
+            int counter = 0;
+            foreach (SchoolEntitySubject schoolEntitySubject in schoolEntitySubjects)
+            {
+                if (prefferedExtendedSubjects == null)
+                    return true;
+                if (prefferedExtendedSubjects.Contains(schoolEntitySubject.Subject.Name)){
+                    counter++;
+                }
+                if (counter >= numberMatchingSubjects)
+                    return true;
+            }
+            return false;
         }
     }
 }

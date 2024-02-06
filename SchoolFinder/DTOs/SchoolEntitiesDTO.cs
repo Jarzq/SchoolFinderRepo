@@ -1,6 +1,6 @@
-﻿namespace SchoolFinder.Controllers
+﻿namespace SchoolFinder.DTOs
 {
-    public class GetSchoolEntitiesControllerResponse
+    public class SchoolEntitiesDTO
     {
         public int Id { get; set; }
         public string? Dzielnica { get; set; }
@@ -13,7 +13,7 @@
         public string? SchoolType { get; set; }
         public int? SpecializationId { get; set; }
         public string? Specialization { get; set; }
-        public List<string>? ExtendedSubjects { get; set;} = new List<string>();
-        public List<string>? Languages { get; set;} = new List<string>();
+        public List<string>? ExtendedSubjects { get; set; } = new List<string>();
+        public List<string>? Languages { get; set; } = new List<string>();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SchoolFinder.Controllers;
+using SchoolFinder.DTOs;
 using SchoolFinder.models;
 
 namespace SchoolFinder.Services
@@ -6,6 +7,7 @@ namespace SchoolFinder.Services
     public interface ISchoolEntitiesService
     {
         IEnumerable<SchoolEntity> GetAllSchoolEntities();
-        IEnumerable<GetSchoolEntitiesControllerResponse> MapSchoolEntities(List<SchoolEntity> schoolEntities);
+        IEnumerable<SchoolEntitiesDTO> GetExactPreferredSchoolEntities(GetPrefferedSchoolEntitiesControllerRequest request);
+        IEnumerable<SchoolEntitiesDTO> MapSchoolEntities(List<SchoolEntity> schoolEntities);
     }
 }
