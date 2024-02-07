@@ -5,7 +5,6 @@ using SchoolFinder.DTOs;
 using SchoolFinder.Enums;
 using SchoolFinder.models;
 using SchoolFinder.Models;
-using System.Linq;
 
 namespace SchoolFinder.Services
 {
@@ -80,8 +79,8 @@ namespace SchoolFinder.Services
                 {
                     preferredEntities.Add(entity);
                 }
-             }
-            
+            }
+
             return MapSchoolEntities(preferredEntities);
         }
 
@@ -99,14 +98,14 @@ namespace SchoolFinder.Services
         }
         private bool CheckSchoolType(string prefferedSchoolType, int entitySchoolType)
         {
-            
+
             if (prefferedSchoolType == Enum.GetName(typeof(SchoolType), entitySchoolType))
                 return true;
             return false;
         }
         private bool CheckPoints(double? acheivedPunkty, double? rangeDecrease, double? rangeIncrease, double minimalnePunkty)
         {
-            if((minimalnePunkty - acheivedPunkty <= rangeDecrease) && (acheivedPunkty - minimalnePunkty <= rangeIncrease))
+            if ((minimalnePunkty - acheivedPunkty <= rangeDecrease) && (acheivedPunkty - minimalnePunkty <= rangeIncrease))
                 return true;
             return false;
         }
@@ -117,7 +116,8 @@ namespace SchoolFinder.Services
             {
                 if (prefferedLanguages == null)
                     return true;
-                if (prefferedLanguages.Contains(schoolEntityLanguageSubject.LanguageSubject.Name)){
+                if (prefferedLanguages.Contains(schoolEntityLanguageSubject.LanguageSubject.Name))
+                {
                     counter++;
                 }
                 if (counter >= numberMatchingLanguages)
@@ -133,7 +133,8 @@ namespace SchoolFinder.Services
             {
                 if (prefferedExtendedSubjects == null)
                     return true;
-                if (prefferedExtendedSubjects.Contains(schoolEntitySubject.Subject.Name)){
+                if (prefferedExtendedSubjects.Contains(schoolEntitySubject.Subject.Name))
+                {
                     counter++;
                 }
                 if (counter >= numberMatchingSubjects)

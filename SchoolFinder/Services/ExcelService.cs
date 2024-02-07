@@ -3,7 +3,6 @@ using SchoolFinder.Data;
 using SchoolFinder.Enums;
 using SchoolFinder.models;
 using SchoolFinder.Models;
-using System.Linq;
 
 namespace SchoolFinder.Services
 {
@@ -24,7 +23,7 @@ namespace SchoolFinder.Services
                 _dbContext.UpdateRange(schoolsWithTypes);
                 await _dbContext.SaveChangesAsync();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message, ex);
             }
@@ -57,7 +56,7 @@ namespace SchoolFinder.Services
             var schoolEntities = _dbContext.SchoolEntities.ToList();
             foreach (SchoolEntity school in schoolEntities)
             {
-                foreach(var specialization in allspecializations)
+                foreach (var specialization in allspecializations)
                 {
                     if (school.NazwaOddzialu.Contains(specialization.Name))
                     {
@@ -179,6 +178,7 @@ namespace SchoolFinder.Services
             if (!isSchoolEntitiesEmpty)
             {
                 _dbContext.SchoolEntities.RemoveRange(await _dbContext.SchoolEntities.ToListAsync());
+                await _dbContext.SaveChangesAsync();
             }
 
             if (!isSchoolEntityLanguageSubjectsEmpty)
@@ -201,7 +201,15 @@ namespace SchoolFinder.Services
                 _dbContext.Specializations.RemoveRange(await _dbContext.Specializations.ToListAsync());
             }
 
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
         }
     }
 }

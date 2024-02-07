@@ -22,7 +22,7 @@ namespace SchoolFinder.Controllers
         {
             var exaxtPreferredSchoolEntities = _service.GetExactPreferredSchoolEntities(request);
 
-            return  new GetPrefferedSchoolEntitiesControllerResponse() {ExactPrefferedSchools = exaxtPreferredSchoolEntities.ToList() };
+            return new GetPrefferedSchoolEntitiesControllerResponse() { ExactPrefferedSchools = exaxtPreferredSchoolEntities.ToList() };
         }
     }
 }
