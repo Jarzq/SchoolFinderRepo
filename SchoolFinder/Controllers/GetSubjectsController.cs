@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using SchoolFinder.Services;
 
 namespace SchoolFinder.Controllers
@@ -17,6 +18,7 @@ namespace SchoolFinder.Controllers
         }
 
         [HttpGet(Name = "GetSubjects")]
+        [EnableCors("AllowOrigin")] // Apply CORS policy
         public async Task<IActionResult> GetSubjects()
         {
             var subjects = _service.GetSubjects().ToList();

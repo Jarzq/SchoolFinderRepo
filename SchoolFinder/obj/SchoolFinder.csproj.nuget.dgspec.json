@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\fmpl6252\\Desktop\\SchoolFinderRepo\\SchoolFinder\\SchoolFinder.csproj": {}
+    "C:\\Users\\fmpl6252\\Desktop\\SchoolFinderRepo\\Backend\\SchoolFinder\\SchoolFinder.csproj": {}
   },
   "projects": {
-    "C:\\Users\\fmpl6252\\Desktop\\SchoolFinderRepo\\SchoolFinder\\SchoolFinder.csproj": {
+    "C:\\Users\\fmpl6252\\Desktop\\SchoolFinderRepo\\Backend\\SchoolFinder\\SchoolFinder.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\fmpl6252\\Desktop\\SchoolFinderRepo\\SchoolFinder\\SchoolFinder.csproj",
+        "projectUniqueName": "C:\\Users\\fmpl6252\\Desktop\\SchoolFinderRepo\\Backend\\SchoolFinder\\SchoolFinder.csproj",
         "projectName": "SchoolFinder",
-        "projectPath": "C:\\Users\\fmpl6252\\Desktop\\SchoolFinderRepo\\SchoolFinder\\SchoolFinder.csproj",
+        "projectPath": "C:\\Users\\fmpl6252\\Desktop\\SchoolFinderRepo\\Backend\\SchoolFinder\\SchoolFinder.csproj",
         "packagesPath": "C:\\Users\\fmpl6252\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\fmpl6252\\Desktop\\SchoolFinderRepo\\SchoolFinder\\obj\\",
+        "outputPath": "C:\\Users\\fmpl6252\\Desktop\\SchoolFinderRepo\\Backend\\SchoolFinder\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\fmpl6252\\AppData\\Roaming\\NuGet\\NuGet.Config",
