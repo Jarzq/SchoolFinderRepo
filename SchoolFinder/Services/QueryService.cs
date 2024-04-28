@@ -3,10 +3,10 @@ using SchoolFinder.Models;
 
 namespace SchoolFinder.Services
 {
-    public class SubjectService : ISubjectService
+    public class QueryService : IQueryService
     {
         private readonly SchoolfinderContext _dbContext;
-        public SubjectService(SchoolfinderContext dbContext)
+        public QueryService(SchoolfinderContext dbContext)
         {
             _dbContext = dbContext;
         }

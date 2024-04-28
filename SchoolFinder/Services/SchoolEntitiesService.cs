@@ -5,6 +5,7 @@ using SchoolFinder.DTOs;
 using SchoolFinder.Enums;
 using SchoolFinder.models;
 using SchoolFinder.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace SchoolFinder.Services
 {
@@ -37,18 +38,18 @@ namespace SchoolFinder.Services
                 var mappedSchoolEntity = new SchoolEntitiesDTO()
                 {
                     Id = schoolEntity.Id,
-                    Dzielnica = schoolEntity.Dzielnica,
-                    MaksymalnePunkty = schoolEntity.MaksymalnePunkty,
-                    MinimalnePunkty = schoolEntity.MinimalnePunkty,
-                    NazwaOddzialu = schoolEntity.NazwaOddzialu,
-                    NazwaSzkoly = schoolEntity.NazwaSzkoly,
+                    District = schoolEntity.Dzielnica,
+                    MaxPoints = schoolEntity.MaksymalnePunkty,
+                    MinPoints = schoolEntity.MinimalnePunkty,
+                    EntityName = schoolEntity.NazwaOddzialu,
+                    SchoolName = schoolEntity.NazwaSzkoly,
                     SchoolTypeEnum = schoolEntity.SchoolType,
                     SpecializationId = schoolEntity.SpecializationId,
                     ExtendedSubjects = schoolEntity.SchoolEntitySubjects
-                        .Select(ses => subjects.FirstOrDefault(s => s.Id == ses.SubjectId)?.Name)
+                        .Select(ses => subjects.FirstOrDefault(s => s.Id == ses.SubjectId)?.FullName)
                         .ToList(),
                     Languages = schoolEntity.SchoolEntityLanguageSubjects
-                        .Select(schoolEntityLanguage => subjects.FirstOrDefault(s => s.Id == schoolEntityLanguage.LanguageSubjectId)?.Name)
+                        .Select(schoolEntityLanguage => subjects.FirstOrDefault(s => s.Id == schoolEntityLanguage.LanguageSubjectId)?.FullName)
                         .ToList(),
                     Specialization = schoolEntity.Specialization?.Name,
                     SchoolType = Enum.GetName(typeof(SchoolType), schoolEntity.SchoolType),
@@ -141,6 +142,27 @@ namespace SchoolFinder.Services
                     return true;
             }
             return false;
+        }
+
+        public IEnumerable<string> GetDistricts()
+        {
+            return _dbContext.SchoolEntities.Select(s => s.Dzielnica).Distinct();
+        }
+
+        public IEnumerable<string> GetLanguages()
+        {
+            var languageIds = _dbContext.SchoolEntityLanguageSubjects.Select(s => s.LanguageSubjectId).Distinct();
+            var languagesList = _dbContext.Subjects
+                .Where(subject => languageIds.Contains(subject.Id))
+                .Select(subject => subject.FullName)
+                .ToList();
+
+            return languagesList;
+        }
+
+        public IEnumerable<string> GetSpecializations()
+        {
+            return _dbContext.SchoolEntities.Select(s => s.Specialization.Name).Where(name => name != null).Distinct();
         }
     }
 }

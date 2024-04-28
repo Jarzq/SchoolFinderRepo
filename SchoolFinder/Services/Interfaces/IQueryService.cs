@@ -2,7 +2,7 @@
 
 namespace SchoolFinder.Services
 {
-    public interface ISubjectService
+    public interface IQueryService
     {
         IEnumerable<Subject> GetSubjects();
     }

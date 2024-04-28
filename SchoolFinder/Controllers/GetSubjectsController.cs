@@ -8,10 +8,10 @@ namespace SchoolFinder.Controllers
     [Route("/Subjects")]
     public class GetSubjectsController : ControllerBase
     {
-        private readonly ISubjectService _service;
+        private readonly IQueryService _service;
         private readonly IConfiguration _configuration;
 
-        public GetSubjectsController(ISubjectService service, IConfiguration configuration)
+        public GetSubjectsController(IQueryService service, IConfiguration configuration)
         {
             _service = service;
             _configuration = configuration;

@@ -14,7 +14,6 @@ namespace SchoolFinder.Models
             set
             {
                 _name = value;
-                // Update FullName based on the new value of Name
                 FullName = GetFullName();
             }
         }
