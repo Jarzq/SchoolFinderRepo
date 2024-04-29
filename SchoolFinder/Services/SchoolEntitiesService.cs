@@ -85,10 +85,14 @@ namespace SchoolFinder.Services
             return MapSchoolEntities(preferredEntities);
         }
 
-        private bool CheckDzielnica(string? prefferedDzielnica, string entityDzielnica)
+        private bool CheckDzielnica(List<string>? prefferedDzielnica, string entityDzielnica)
         {
-            if (prefferedDzielnica == entityDzielnica || prefferedDzielnica == null)
-                return true;
+            if(prefferedDzielnica == null) { return true; }
+
+            foreach(string dzielnica in prefferedDzielnica)
+            {
+                if(dzielnica.Equals(entityDzielnica)) return true;
+            }
             return false;
         }
         private bool CheckSpecializationName(string? prefferedSpecialization, string entitySpecialization)
@@ -117,7 +121,7 @@ namespace SchoolFinder.Services
             {
                 if (prefferedLanguages == null)
                     return true;
-                if (prefferedLanguages.Contains(schoolEntityLanguageSubject.LanguageSubject.Name))
+                if (prefferedLanguages.Contains(schoolEntityLanguageSubject.LanguageSubject.FullName))
                 {
                     counter++;
                 }
@@ -134,7 +138,7 @@ namespace SchoolFinder.Services
             {
                 if (prefferedExtendedSubjects == null)
                     return true;
-                if (prefferedExtendedSubjects.Contains(schoolEntitySubject.Subject.Name))
+                if (prefferedExtendedSubjects.Contains(schoolEntitySubject.Subject.FullName))
                 {
                     counter++;
                 }

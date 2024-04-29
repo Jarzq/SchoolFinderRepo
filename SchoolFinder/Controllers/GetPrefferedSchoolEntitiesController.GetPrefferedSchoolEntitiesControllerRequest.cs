@@ -2,7 +2,7 @@
 {
     public class GetPrefferedSchoolEntitiesControllerRequest
     {
-        public string? PrefferedDzielnica { get; set; }
+        public List<string>? PrefferedDzielnica { get; set; }
         public double? AcheivedPunkty { get; set; }
         public double? RangeIncrease { get; set; }
         public double? rangeDecrease { get; set; }
