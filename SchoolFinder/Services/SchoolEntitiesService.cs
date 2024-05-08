@@ -5,7 +5,6 @@ using SchoolFinder.DTOs;
 using SchoolFinder.Enums;
 using SchoolFinder.models;
 using SchoolFinder.Models;
-using System.ComponentModel.DataAnnotations;
 
 namespace SchoolFinder.Services
 {
@@ -87,11 +86,11 @@ namespace SchoolFinder.Services
 
         private bool CheckDzielnica(List<string>? prefferedDzielnica, string entityDzielnica)
         {
-            if(prefferedDzielnica == null) { return true; }
+            if (prefferedDzielnica == null || prefferedDzielnica.Count == 0) { return true; }
 
-            foreach(string dzielnica in prefferedDzielnica)
+            foreach (string dzielnica in prefferedDzielnica)
             {
-                if(dzielnica.Equals(entityDzielnica)) return true;
+                if (dzielnica.Equals(entityDzielnica)) return true;
             }
             return false;
         }
@@ -167,6 +166,11 @@ namespace SchoolFinder.Services
         public IEnumerable<string> GetSpecializations()
         {
             return _dbContext.SchoolEntities.Select(s => s.Specialization.Name).Where(name => name != null).Distinct();
+        }
+
+        public IEnumerable<string> GetSubjects()
+        {
+            return _dbContext.Subjects.Select(s => s.FullName).Distinct();
         }
     }
 }

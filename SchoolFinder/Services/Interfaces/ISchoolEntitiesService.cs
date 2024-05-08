@@ -12,5 +12,6 @@ namespace SchoolFinder.Services
         IEnumerable<string> GetDistricts();
         IEnumerable<string> GetLanguages();
         IEnumerable<string> GetSpecializations();
+        IEnumerable<string> GetSubjects();
     }
 }

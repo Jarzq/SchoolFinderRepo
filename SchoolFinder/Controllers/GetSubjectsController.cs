@@ -8,10 +8,10 @@ namespace SchoolFinder.Controllers
     [Route("/Subjects")]
     public class GetSubjectsController : ControllerBase
     {
-        private readonly IQueryService _service;
+        private readonly ISchoolEntitiesService _service;
         private readonly IConfiguration _configuration;
 
-        public GetSubjectsController(IQueryService service, IConfiguration configuration)
+        public GetSubjectsController(ISchoolEntitiesService service, IConfiguration configuration)
         {
             _service = service;
             _configuration = configuration;
@@ -21,7 +21,7 @@ namespace SchoolFinder.Controllers
         [EnableCors("AllowOrigin")] // Apply CORS policy
         public async Task<IActionResult> GetSubjects()
         {
-            var subjects = _service.GetSubjects().ToList();
+            var subjects = _service.GetSubjects();
 
             if (subjects == null)
             {
